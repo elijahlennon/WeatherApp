@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace WeatherMapExercise
 {
@@ -6,7 +8,20 @@ namespace WeatherMapExercise
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            string key = File.ReadAllText("appsettings.json");
+            string APIkey = JObject.Parse(key).GetValue("APIKey").ToString();
+
+            Console.WriteLine("Please enter your zipcode.");
+
+            var zipCode = Console.ReadLine();
+
+            var apiCall = $"https://api.openweathermap.org/data/2.5/weather?zip={zipCode}&units=imperial&appid={APIkey}";
+
+            Console.WriteLine();
+
+            Console.WriteLine($"It is currently {WeatherGenerator.GetTemp(apiCall)} degrees F in your location.");
+
+
         }
     }
 }
